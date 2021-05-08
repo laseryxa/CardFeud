@@ -499,5 +499,7 @@ MonoBehaviour:
   cardPrefab: {fileID: 3374772632987914097, guid: 74f22045e5d50dec1a5abd2e29b22700, type: 3}
   handlayoutPrefab: {fileID: 8715453772070188179, guid: 1eae4dd974abb9d2c84d9048277c763b, type: 3}
   deckPrefab: {fileID: 4060906646498382398, guid: e6d09d34e9d82eb15bdb534eaae390f0, type: 3}
+  playerActivatedCardsAreaPrefab: {fileID: 6997909327866548767, guid: 13b6f8e14fcdece109cc4ee028618481, type: 3}
   playerHand: {fileID: 0}
   playerDeck: {fileID: 0}
+  playerActivatedCardsArea: {fileID: 0}
