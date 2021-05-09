@@ -24,7 +24,7 @@ public class Deck : MonoBehaviour
     List<CardData> cards;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         cards = new List<CardData>();
     }
