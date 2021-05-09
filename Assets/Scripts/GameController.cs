@@ -23,8 +23,12 @@ public class GameController : MonoBehaviour
 
         playerActivatedCardsArea = Instantiate(playerActivatedCardsAreaPrefab, transform);
         playerHand = Instantiate(handlayoutPrefab, transform);
-        playerDeck = Instantiate(deckPrefab, transform);
+        playerDeck = Instantiate(deckPrefab, transform);                
         player = Instantiate(playerPrefab, transform);
+        playerActivatedCardsArea.owningPlayer = player;
+        //player = Instantiate(GloablState.selectedPlayer, transform);
+        //player = GloablState.selectedPlayer;
+
         RectTransform rectTransform = player.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = new Vector3(400, -200, 0);
         playerDeck.CardPrefab = cardPrefab;

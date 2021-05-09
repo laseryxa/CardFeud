@@ -500,6 +500,8 @@ MonoBehaviour:
   handlayoutPrefab: {fileID: 8715453772070188179, guid: 1eae4dd974abb9d2c84d9048277c763b, type: 3}
   deckPrefab: {fileID: 4060906646498382398, guid: e6d09d34e9d82eb15bdb534eaae390f0, type: 3}
   playerActivatedCardsAreaPrefab: {fileID: 6997909327866548767, guid: 13b6f8e14fcdece109cc4ee028618481, type: 3}
+  playerPrefab: {fileID: 4680207359963616059, guid: 14dcc07bf090f4ce09802303bc7eaf4b, type: 3}
   playerHand: {fileID: 0}
   playerDeck: {fileID: 0}
   playerActivatedCardsArea: {fileID: 0}
+  player: {fileID: 0}
