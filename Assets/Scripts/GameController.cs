@@ -28,22 +28,27 @@ public class GameController : MonoBehaviour
         playerHand.deck = playerDeck;
     }
 
+    void DrawCardsFromDeck(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            Card currentCard = playerDeck.drawCard();
+            playerHand.AddCard(currentCard);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (step == 0) {
-            playerDeck.AddCard("Best card");
-            playerDeck.AddCard("Silly card");
-            playerDeck.AddCard("Not so good card");
+            playerDeck.AddCard("Best card", 0, 10, 10);
+            playerDeck.AddCard("Silly card", 3, 0, 3);
+            playerDeck.AddCard("Not so good card", 7, 1, 1);
+            for (int i = 0; i < 100; i++) {
+                playerDeck.AddCard("Card " + i.ToString(), i % 10, i % 5 + 1, i % 7);
+            }
 
-            Card currentCard = playerDeck.drawCard();
-            playerHand.AddCard(currentCard);
-
-            currentCard = playerDeck.drawCard();
-            playerHand.AddCard(currentCard);
-
-            currentCard = playerDeck.drawCard();
-            playerHand.AddCard(currentCard);
+            DrawCardsFromDeck(5);
         }
         step = step + 1;
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,9 +8,10 @@ using DG.Tweening;
 
 public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    [SerializeField]
-    TextMeshProUGUI Label;
-
+    [SerializeField] TextMeshProUGUI Label;
+    [SerializeField] TextMeshProUGUI Cost;
+    [SerializeField] TextMeshProUGUI Attack;
+    [SerializeField] TextMeshProUGUI Defence;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private Vector3 startPosition;
@@ -74,4 +76,32 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
     {
         return Label.text;
     }
+    public void SetCost(int cost)
+    {
+        Cost.text = cost.ToString();
+    }
+
+    public int GetCost()
+    {
+        return int.Parse(Cost.text);
+    }
+    public void SetAttack(int attack)
+    {
+        Attack.text = attack.ToString();
+    }
+
+    public int GetAttack()
+    {
+        return int.Parse(Attack.text);
+    }
+    public void SetDefence(int defence)
+    {
+        Defence.text = defence.ToString();
+    }
+
+    public int GetDefence()
+    {
+        return int.Parse(Defence.text);
+    }
+
 }

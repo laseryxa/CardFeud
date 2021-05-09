@@ -29,9 +29,9 @@ public class Deck : MonoBehaviour
         cards = new List<CardData>();
     }
 
-    public void AddCard(string name)
+    public void AddCard(string name, int cost, int attack, int defence)
     {        
-        cards.Add(new CardData(name, 1, 1, 1));
+        cards.Add(new CardData(name, cost, attack, defence));
     }
 
     public Card drawCard()
@@ -42,6 +42,9 @@ public class Deck : MonoBehaviour
             Card card = Instantiate(CardPrefab, transform);
             var cardComponent = card.GetComponent<Card>();
             cardComponent.SetLabel(c.name);
+            cardComponent.SetCost(c.cost);
+            cardComponent.SetAttack(c.attack);
+            cardComponent.SetDefence(c.defence);
 
             return card;
         } else {
