@@ -41,7 +41,7 @@ public class Deck : MonoBehaviour
             cards.RemoveAt(0);
             Card card = Instantiate(CardPrefab, transform);
             var cardComponent = card.GetComponent<Card>();
-            cardComponent.SetLabel(c.name);
+            cardComponent.SetLabel("<color=#005500>" + c.name);
             cardComponent.SetCost(c.cost);
             cardComponent.SetAttack(c.attack);
             cardComponent.SetDefence(c.defence);
