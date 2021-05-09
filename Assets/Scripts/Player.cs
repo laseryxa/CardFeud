@@ -6,9 +6,10 @@ using TMPro;
 public class Player : MonoBehaviour
 {
     private RectTransform rectTransform;
-
+    [SerializeField] public int health;
     [SerializeField] public int gold;
     [SerializeField] public TextMeshProUGUI goldText;
+    [SerializeField] public TextMeshProUGUI healthText;
     [SerializeField] public Image image;
     public void AddGold(int amount) 
     {
@@ -18,6 +19,14 @@ public class Player : MonoBehaviour
     public int GetGold()
     {
         return gold;
+    }
+    public void SetHealth(int health)
+    {
+        this.health = health;
+    }
+    public int GetHealth()
+    {
+        return health;
     }
 
     private void Awake()
@@ -34,5 +43,6 @@ public class Player : MonoBehaviour
     void Update()
     {
         goldText.text = "Gold: " + gold.ToString();
+        healthText.text = "Health: " + health.ToString();
     }
 }
