@@ -14,7 +14,7 @@ public class ActivatedCardsArea : MonoBehaviour, IDropHandler
             
             eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
             Debug.Log("Dropped " + card.GetLabel());
-
+            card.DropAccepted();
             Rearrange();
         }
     }

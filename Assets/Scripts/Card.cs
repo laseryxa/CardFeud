@@ -16,11 +16,18 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
     private CanvasGroup canvasGroup;
     private Vector3 startPosition;
     private bool isDragged;
+    private bool dropAccepted;
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
         isDragged = false;
+        dropAccepted = false;
+    }
+
+    public void DropAccepted()
+    {
+        dropAccepted = true;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -44,6 +51,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        dropAccepted = false;
         //Debug.Log("Begin drag '" + Label.text.ToString() + "'");
         startPosition = rectTransform.anchoredPosition;
         canvasGroup.alpha = 0.7f;
@@ -55,7 +63,9 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
     public void OnEndDrag(PointerEventData eventData)
     {
         //Debug.Log("End drag '" + Label.text.ToString() + "'");
-        //rectTransform.anchoredPosition = startPosition;
+        if (!dropAccepted) {
+            rectTransform.anchoredPosition = startPosition;
+        }
         canvasGroup.alpha = 1.0f;
         isDragged = false;
         canvasGroup.blocksRaycasts = true;
