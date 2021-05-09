@@ -23,7 +23,6 @@ public class Deck : MonoBehaviour
     public Card CardPrefab;
     List<CardData> cards;
 
-    // Start is called before the first frame update
     void Awake()
     {
         cards = new List<CardData>();

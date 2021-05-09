@@ -14,13 +14,17 @@ public class GameController : MonoBehaviour
     public Deck playerDeck;
     public ActivatedCardsArea playerActivatedCardsArea;
     public Player player;
-    int step;
+
+    public int turn;
+
+    void Awake()
+    {
+        turn = 1;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        step = 0;
-
         if (GlobalState.selectedPlayer) {
             player = Instantiate(GlobalState.selectedPlayer, transform);
         } else {
@@ -32,15 +36,21 @@ public class GameController : MonoBehaviour
         playerHand = Instantiate(handlayoutPrefab, transform);
         playerDeck = Instantiate(deckPrefab, transform);                
 
-        //player = Instantiate(playerPrefab, transform);
-        //player = GlobalState.selectedPlayer;
-
         playerActivatedCardsArea.owningPlayer = player;
 
         RectTransform rectTransform = player.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = new Vector3(400, -200, 0);
         playerDeck.CardPrefab = cardPrefab;
         playerHand.deck = playerDeck;
+
+        playerDeck.AddCard("Best card", 0, 10, 10);
+        playerDeck.AddCard("Silly card", 3, 0, 3);
+        playerDeck.AddCard("Not so good card", 7, 1, 1);
+        for (int i = 0; i < 100; i++) {
+            playerDeck.AddCard("Card " + i.ToString(), i % 10, i % 5 + 1, i % 7);
+        }
+
+        DrawCardsFromDeck(5);
     }
 
     void DrawCardsFromDeck(int count)
@@ -52,19 +62,16 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public void EndTurn()
+    {
+        Debug.Log("End turn");
+        turn += 1;
+        DrawCardsFromDeck(1);
+        player.AddGold(turn);
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (step == 0) {
-            playerDeck.AddCard("Best card", 0, 10, 10);
-            playerDeck.AddCard("Silly card", 3, 0, 3);
-            playerDeck.AddCard("Not so good card", 7, 1, 1);
-            for (int i = 0; i < 100; i++) {
-                playerDeck.AddCard("Card " + i.ToString(), i % 10, i % 5 + 1, i % 7);
-            }
-
-            DrawCardsFromDeck(5);
-        }
-        step = step + 1;
     }
 }
