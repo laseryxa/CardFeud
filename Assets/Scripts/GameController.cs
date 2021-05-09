@@ -7,13 +7,13 @@ public class GameController : MonoBehaviour
     [SerializeField] public Card cardPrefab;
     [SerializeField] public HandLayout handlayoutPrefab;
     [SerializeField] public Deck deckPrefab;
-
     [SerializeField] public ActivatedCardsArea playerActivatedCardsAreaPrefab;
+    [SerializeField] public Player playerPrefab;
 
     public HandLayout playerHand;
     public Deck playerDeck;
-
     public ActivatedCardsArea playerActivatedCardsArea;
+    public Player player;
     int step;
 
     // Start is called before the first frame update
@@ -24,6 +24,9 @@ public class GameController : MonoBehaviour
         playerActivatedCardsArea = Instantiate(playerActivatedCardsAreaPrefab, transform);
         playerHand = Instantiate(handlayoutPrefab, transform);
         playerDeck = Instantiate(deckPrefab, transform);
+        player = Instantiate(playerPrefab, transform);
+        RectTransform rectTransform = player.GetComponent<RectTransform>();
+        rectTransform.anchoredPosition = new Vector3(400, -200, 0);
         playerDeck.CardPrefab = cardPrefab;
         playerHand.deck = playerDeck;
     }
