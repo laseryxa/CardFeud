@@ -53,6 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gold: 0
   goldText: {fileID: 5498823241287164978}
+  image: {fileID: 859709862240905926}
 --- !u!1 &4841187142338001343
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 public class Player : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] public int gold;
     [SerializeField] public TextMeshProUGUI goldText;
-
+    [SerializeField] public Image image;
     public void AddGold(int amount) 
     {
         gold += amount;        
