@@ -14,6 +14,11 @@ public class MainMenuController : MonoBehaviour
         Debug.Log("Selecting character that has " + GlobalState.selectedPlayer.GetGold().ToString() + " gold");
     }
 
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
     public void LoadGame()
     {
         if (!GlobalState.selectedPlayer) {
