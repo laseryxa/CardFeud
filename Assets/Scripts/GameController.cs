@@ -21,12 +21,18 @@ public class GameController : MonoBehaviour
     {
         step = 0;
 
+        if (GlobalState.selectedPlayer) {
+            player = Instantiate(GlobalState.selectedPlayer, transform);
+        } else {
+            Debug.Log("Since we didn't choose a character, use default prefab for testing purposes.");
+            player = Instantiate(playerPrefab, transform);
+        }
+
         playerActivatedCardsArea = Instantiate(playerActivatedCardsAreaPrefab, transform);
         playerHand = Instantiate(handlayoutPrefab, transform);
         playerDeck = Instantiate(deckPrefab, transform);                
 
         //player = Instantiate(playerPrefab, transform);
-        player = Instantiate(GlobalState.selectedPlayer, transform);
         //player = GlobalState.selectedPlayer;
 
         playerActivatedCardsArea.owningPlayer = player;
