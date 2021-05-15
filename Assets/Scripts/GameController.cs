@@ -24,6 +24,11 @@ public class GameController : MonoBehaviour
     public ActivatedCardsArea playerActivatedCardsArea;
     public Player player;
 
+    public HandLayout opponentHand;
+    public Deck opponentDeck;
+    public ActivatedCardsArea opponentActivatedCardsArea;
+    public Player opponent;
+
     public int turn;
 
     public List<Ability> abilities;
@@ -37,6 +42,26 @@ public class GameController : MonoBehaviour
         turn = 1;
     }
 
+    void CreateStartDeck(Deck deck)
+    {
+        deck.AddCard("Dogdas", 6, 3, 7); // beast
+        deck.AddCard("Wolf", 2, 2, 2); // beast
+        deck.AddCard("Spirit Wolf", 5, 3, 4); // beast
+        deck.AddCard("Sharp Tooth", 7, 3, 4); // beast
+        deck.AddCard("Uldrurth", 8, 4, 6); // dragon
+        deck.AddCard("Rhinium", 9, 2, 12); // beast
+        deck.AddCard("Rexossum", 7, 6, 9); // beast
+        deck.AddCard("Aarbrok", 3, 2, 4); // beast
+        deck.AddCard("Aluxious", 2, 3, 2); // beast
+        deck.AddCard("Gereon", 7, 6, 8); // dragon
+        deck.AddCard("Best card", 0, 10, 10);
+        deck.AddCard("Silly card", 3, 0, 3);
+        deck.AddCard("Not so good card", 7, 1, 1);
+        for (int i = 0; i < 100; i++) {
+            deck.AddCard("Card " + i.ToString(), i % 10, i % 5 + 1, i % 7);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,42 +73,37 @@ public class GameController : MonoBehaviour
         }
 
         playerActivatedCardsArea = Instantiate(playerActivatedCardsAreaPrefab, transform);
+        RectTransform rectTransform = playerActivatedCardsArea.GetComponent<RectTransform>();
+        rectTransform.anchoredPosition = new Vector3(0, -50, 0);
+
         playerHand = Instantiate(handlayoutPrefab, transform);
+        rectTransform = playerHand.GetComponent<RectTransform>();
+        rectTransform.anchoredPosition = new Vector3(0, -280, 0);
+
         playerDeck = Instantiate(deckPrefab, transform);                
 
         playerActivatedCardsArea.owningPlayer = player;
-
-        RectTransform rectTransform = player.GetComponent<RectTransform>();
+        rectTransform = player.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = new Vector3(400, -200, 0);
         playerDeck.CardPrefab = cardPrefab;
         playerHand.deck = playerDeck;
 
-        playerDeck.AddCard("Dogdas", 6, 3, 7); // beast
-        playerDeck.AddCard("Wolf", 2, 2, 2); // beast
-        playerDeck.AddCard("Spirit Wolf", 5, 3, 4); // beast
-        playerDeck.AddCard("Sharp Tooth", 7, 3, 4); // beast
-        playerDeck.AddCard("Uldrurth", 8, 4, 6); // dragon
-        playerDeck.AddCard("Rhinium", 9, 2, 12); // beast
-        playerDeck.AddCard("Rexossum", 7, 6, 9); // beast
-        playerDeck.AddCard("Aarbrok", 3, 2, 4); // beast
-        playerDeck.AddCard("Aluxious", 2, 3, 2); // beast
-        playerDeck.AddCard("Gereon", 7, 6, 8); // dragon
-        playerDeck.AddCard("Best card", 0, 10, 10);
-        playerDeck.AddCard("Silly card", 3, 0, 3);
-        playerDeck.AddCard("Not so good card", 7, 1, 1);
-        for (int i = 0; i < 100; i++) {
-            playerDeck.AddCard("Card " + i.ToString(), i % 10, i % 5 + 1, i % 7);
-        }
+        CreateStartDeck(playerHand.deck);
+        DrawCardsFromDeck(playerHand, 5);
 
-        DrawCardsFromDeck(5);
+        opponentActivatedCardsArea.owningPlayer = opponent;
+        opponentHand.deck = opponentDeck;
+        CreateStartDeck(opponentHand.deck);
+        DrawCardsFromDeck(opponentHand, 5);
+
     }
 
-    void DrawCardsFromDeck(int count)
+    void DrawCardsFromDeck(HandLayout hand, int count)
     {
         for (int i = 0; i < count; i++)
         {
-            Card currentCard = playerDeck.drawCard();
-            playerHand.AddCard(currentCard);
+            Card currentCard = hand.deck.drawCard();
+            hand.AddCard(currentCard);
         }
     }
 
@@ -91,7 +111,7 @@ public class GameController : MonoBehaviour
     {
         Debug.Log("End turn");
         turn += 1;
-        DrawCardsFromDeck(1);
+        DrawCardsFromDeck(playerHand, 1);
         player.AddGold(turn);
     }
 
