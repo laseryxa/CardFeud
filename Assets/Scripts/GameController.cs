@@ -81,6 +81,7 @@ public class GameController : MonoBehaviour
         rectTransform.anchoredPosition = new Vector3(0, -280, 0);
 
         playerDeck = Instantiate(deckPrefab, transform);                
+        playerDeck.owner = player;
 
         playerActivatedCardsArea.owningPlayer = player;
         rectTransform = player.GetComponent<RectTransform>();
@@ -93,6 +94,7 @@ public class GameController : MonoBehaviour
 
         opponentActivatedCardsArea.owningPlayer = opponent;
         opponentHand.deck = opponentDeck;
+        opponentDeck.owner = opponent;
         CreateStartDeck(opponentHand.deck);
         DrawCardsFromDeck(opponentHand, 5);
 
@@ -111,6 +113,8 @@ public class GameController : MonoBehaviour
     {
         Debug.Log("End turn");
         turn += 1;
+        playerActivatedCardsArea.Tick();
+        opponentActivatedCardsArea.Tick();
         DrawCardsFromDeck(playerHand, 1);
         player.AddGold(turn);
     }

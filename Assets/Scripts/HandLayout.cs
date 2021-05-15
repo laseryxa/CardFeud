@@ -28,19 +28,22 @@ public class HandLayout : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        if (eventData.pointerDrag != null)
+        /*
+        if (false) //eventData.pointerDrag != null)
         {
             Card card = eventData.pointerDrag.GetComponent<Card>();
-              
-            //card.transform.SetParent(this.transform);           
-            AddCard(card);
-            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
-            Debug.Log("Dropped " + card.GetLabel());
+                        
+            if (card.transform.parent != this.transform) 
+            {
+                AddCard(card);
+                eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
+                Debug.Log("Dropped " + card.GetLabel());
 
-            card.DropAccepted();
-
-            Rearrange();
+                card.DropAccepted();
+                Rearrange();
+            }
         }
+        */
     }
 
     public void Rearrange()    

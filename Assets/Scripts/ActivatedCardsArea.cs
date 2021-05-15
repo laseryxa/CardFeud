@@ -12,19 +12,37 @@ public class ActivatedCardsArea : MonoBehaviour, IDropHandler
         if (eventData.pointerDrag != null)
         {
             Card card = eventData.pointerDrag.GetComponent<Card>();
-            Debug.Log("Card cost is " + card.GetCost().ToString() + " and player has " + owningPlayer.GetGold().ToString());
-            if (card.GetCost() <= owningPlayer.GetGold())
+
+            if (card.owner == owningPlayer)
             {
-                Debug.Log("Dropped " + card.GetLabel());
-                eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
-                card.transform.SetParent(this.transform);
-                card.DropAccepted();
-                Rearrange();
-                owningPlayer.AddGold(-card.GetCost());
+                if (card.transform.parent != this.transform) 
+                {
+                    Debug.Log("Card cost is " + card.GetCost().ToString() + " and player has " + owningPlayer.GetGold().ToString());
+                    if (card.GetCost() <= owningPlayer.GetGold())
+                    {
+                        Debug.Log("Dropped " + card.GetLabel());
+                        eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
+                        card.transform.SetParent(this.transform);
+                        card.DropAccepted();
+                        Rearrange();
+                        owningPlayer.AddGold(-card.GetCost());
+                    } else {
+                        Debug.Log(card.GetLabel() + " is to expensive!");
+                    }
+                }
             } else {
-                Debug.Log(card.GetLabel() + " is to expensive!");
+                Debug.Log("Tried to drop card in opponents area!");
             }
         }
+    }
+
+    public void Tick()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            GameObject cardObject = transform.GetChild(i).gameObject;
+            cardObject.GetComponent<Card>().removeStatus(Card.Status.Sleeping);
+        }        
     }
 
     private void Rearrange()

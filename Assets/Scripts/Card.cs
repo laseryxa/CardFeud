@@ -2,21 +2,51 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 
-public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
+public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
 {
+    public enum Status {
+        Active,
+        Sleeping,
+        Frozen,
+        Burning,
+        Haste,
+        Taunt
+    };
     [SerializeField] TextMeshProUGUI Label;
     [SerializeField] TextMeshProUGUI Cost;
     [SerializeField] TextMeshProUGUI Attack;
     [SerializeField] TextMeshProUGUI Defence;
+    [SerializeField] Image sleepingImage;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private Vector3 startPosition;
+    private HandLayout startHand;
     private bool isDragged;
     private bool dropAccepted;
+    public List<Status> statuses;
+    public Player owner;
+    public void addStatus(Status status)
+    {
+        if (! hasStatus(status)) {
+            statuses.Add(status);
+        }
+    }
+    public void removeStatus(Status status)
+    {
+        statuses.RemoveAll(itemStatus => itemStatus == status);
+    }
+    public bool hasStatus(Status status)
+    {
+        for (int i = 0; i < statuses.Count; i++) {
+            if (statuses[i] == status) return true;
+        }
+        return false;
+    }
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -28,6 +58,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
     public void DropAccepted()
     {
         dropAccepted = true;
+        addStatus(Status.Sleeping);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -51,12 +82,26 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (hasStatus(Status.Sleeping))
+        {
+            eventData.pointerDrag = null;                        
+            return;
+        }
         dropAccepted = false;
         //Debug.Log("Begin drag '" + Label.text.ToString() + "'");
         startPosition = rectTransform.anchoredPosition;
         canvasGroup.alpha = 0.7f;
         canvasGroup.blocksRaycasts = false;
         isDragged = true;
+
+        HandLayout hand = this.transform.parent.GetComponent<HandLayout>();
+        if (hand)
+        {
+            //Debug.Log("Calling rearrange when started dragging");
+            //hand.Rearrange();
+            startHand = hand;
+        }
+
         rectTransform.DOComplete();
         rectTransform.DOScale(Vector3.one * 1.5f, 0.3f).SetEase(Ease.OutQuad);
     }
@@ -71,10 +116,26 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
         canvasGroup.blocksRaycasts = true;
         rectTransform.DOComplete();
         rectTransform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutQuad);
+        if (startHand) {
+            startHand.Rearrange();
+            Debug.Log("Calling rearrange hand");
+        }
     }
     public void OnDrag(PointerEventData eventData)
     {
         rectTransform.anchoredPosition += eventData.delta;
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        Card card = eventData.pointerDrag.GetComponent<Card>();
+        if (card.owner == owner) {
+            Debug.Log("Trying to stack own cards, just ignore");
+        } else {
+            Debug.Log("Fight!");    
+            SetDefence(GetDefence() - card.GetAttack());
+            card.SetDefence(card.GetDefence() - GetAttack());
+        }
     }
 
     public void SetLabel(string text)
@@ -112,6 +173,24 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
     public int GetDefence()
     {
         return int.Parse(Defence.text);
+    }
+
+    private void Die()
+    {
+        rectTransform.DOComplete();
+        Destroy(this.gameObject);
+    }
+
+    public void Update()
+    {
+        if (sleepingImage)
+        {
+            sleepingImage.enabled = hasStatus(Status.Sleeping);
+        }
+        if (GetDefence() <= 0)
+        {
+            Die();    
+        }
     }
 
 }

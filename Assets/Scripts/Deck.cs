@@ -22,6 +22,7 @@ public class Deck : MonoBehaviour
     [SerializeField]
     public Card CardPrefab;
     List<CardData> cards;
+    public Player owner;
 
     void Awake()
     {
@@ -44,6 +45,7 @@ public class Deck : MonoBehaviour
             cardComponent.SetCost(c.cost);
             cardComponent.SetAttack(c.attack);
             cardComponent.SetDefence(c.defence);
+            cardComponent.owner = owner;
 
             return card;
         } else {
