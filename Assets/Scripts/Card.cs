@@ -10,7 +10,7 @@ using DG.Tweening;
 public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
 {
     public enum Status {
-        Active,
+        Activated,
         Sleeping,
         Frozen,
         Burning,
@@ -82,7 +82,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (hasStatus(Status.Sleeping))
+        if (hasStatus(Status.Sleeping) || hasStatus(Status.Activated))
         {
             eventData.pointerDrag = null;                        
             return;
@@ -135,6 +135,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
             Debug.Log("Fight!");    
             SetDefence(GetDefence() - card.GetAttack());
             card.SetDefence(card.GetDefence() - GetAttack());
+            card.addStatus(Status.Activated);
         }
     }
 

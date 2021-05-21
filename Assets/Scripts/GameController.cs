@@ -33,6 +33,8 @@ public class GameController : MonoBehaviour
 
     public List<Ability> abilities;
 
+    public Player currentPlayer;
+
     public void AddAbility(string name) {
         abilities.Add(new Ability(name));
     }
@@ -65,12 +67,16 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        const int cardsAtFirstDraw = 3;
+
         if (GlobalState.selectedPlayer) {
             player = Instantiate(GlobalState.selectedPlayer, transform);
         } else {
             Debug.Log("Since we didn't choose a character, use default prefab for testing purposes.");
             player = Instantiate(playerPrefab, transform);
         }
+
+        currentPlayer = player;
 
         playerActivatedCardsArea = Instantiate(playerActivatedCardsAreaPrefab, transform);
         RectTransform rectTransform = playerActivatedCardsArea.GetComponent<RectTransform>();
@@ -90,13 +96,13 @@ public class GameController : MonoBehaviour
         playerHand.deck = playerDeck;
 
         CreateStartDeck(playerHand.deck);
-        DrawCardsFromDeck(playerHand, 5);
+        DrawCardsFromDeck(playerHand, cardsAtFirstDraw);
 
         opponentActivatedCardsArea.owningPlayer = opponent;
         opponentHand.deck = opponentDeck;
         opponentDeck.owner = opponent;
         CreateStartDeck(opponentHand.deck);
-        DrawCardsFromDeck(opponentHand, 5);
+        DrawCardsFromDeck(opponentHand, cardsAtFirstDraw);
 
     }
 
@@ -112,15 +118,56 @@ public class GameController : MonoBehaviour
     public void EndTurn()
     {
         Debug.Log("End turn");
-        turn += 1;
         playerActivatedCardsArea.Tick();
         opponentActivatedCardsArea.Tick();
-        DrawCardsFromDeck(playerHand, 1);
-        player.AddGold(turn);
+        if (currentPlayer == player) {
+            turn += 1;
+            currentPlayer = opponent;
+            DrawCardsFromDeck(opponentHand, 1);
+            opponent.AddGold(turn);
+        } else {
+            currentPlayer = player;
+            DrawCardsFromDeck(playerHand, 1);
+            player.AddGold(turn);
+        }
+    }
+
+    // Return true if a card was played
+    bool TryPlayMostExpensiveCard()
+    {
+        int mostExpensiveCardIndex = -1;
+        int mostExpensiveCardCost = -1;
+        
+        for (int i = 0; i < opponentHand.transform.childCount; i++)
+        {
+            GameObject cardObject = opponentHand.transform.GetChild(i).gameObject;
+            Card card = cardObject.GetComponent<Card>();
+            if (card.GetCost() > mostExpensiveCardCost && card.GetCost() <= opponent.GetGold()) 
+            {
+                mostExpensiveCardCost = card.GetCost();
+                mostExpensiveCardIndex = i;
+            }            
+        }
+
+        if (mostExpensiveCardIndex >= 0)
+        {
+            GameObject cardObject = opponentHand.transform.GetChild(mostExpensiveCardIndex).gameObject;
+            Card card = cardObject.GetComponent<Card>();
+            Debug.Log("Want to play " + card.GetLabel());
+            opponentActivatedCardsArea.PlayCard(cardObject);
+        }
+
+        return mostExpensiveCardCost >= 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (currentPlayer == opponent)
+        {
+            if (!TryPlayMostExpensiveCard())
+            {
+            } 
+        }
     }
 }

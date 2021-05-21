@@ -7,6 +7,18 @@ public class ActivatedCardsArea : MonoBehaviour, IDropHandler
 {   
     [SerializeField] public Player owningPlayer;
 
+
+    public void PlayCard(GameObject cardObject)
+    {
+        cardObject.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
+        Card card = cardObject.GetComponent<Card>();
+        Debug.Log("Played " + card.GetLabel());
+        card.transform.SetParent(this.transform);
+        card.DropAccepted();
+        Rearrange();
+        owningPlayer.AddGold(-card.GetCost());
+    }
+
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.pointerDrag != null)
@@ -20,12 +32,13 @@ public class ActivatedCardsArea : MonoBehaviour, IDropHandler
                     Debug.Log("Card cost is " + card.GetCost().ToString() + " and player has " + owningPlayer.GetGold().ToString());
                     if (card.GetCost() <= owningPlayer.GetGold())
                     {
-                        Debug.Log("Dropped " + card.GetLabel());
-                        eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
-                        card.transform.SetParent(this.transform);
-                        card.DropAccepted();
-                        Rearrange();
-                        owningPlayer.AddGold(-card.GetCost());
+                        PlayCard(eventData.pointerDrag);
+                        //Debug.Log("Dropped " + card.GetLabel());
+                        //eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
+                        //card.transform.SetParent(this.transform);
+                        //card.DropAccepted();
+                        //Rearrange();
+                        //owningPlayer.AddGold(-card.GetCost());
                     } else {
                         Debug.Log(card.GetLabel() + " is to expensive!");
                     }
@@ -42,6 +55,7 @@ public class ActivatedCardsArea : MonoBehaviour, IDropHandler
         {
             GameObject cardObject = transform.GetChild(i).gameObject;
             cardObject.GetComponent<Card>().removeStatus(Card.Status.Sleeping);
+            cardObject.GetComponent<Card>().removeStatus(Card.Status.Activated);
         }        
     }
 

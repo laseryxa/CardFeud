@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDropHandler
 {
     private RectTransform rectTransform;
     [SerializeField] public int health;
@@ -44,5 +45,21 @@ public class Player : MonoBehaviour
     {
         goldText.text = "Gold: " + gold.ToString();
         healthText.text = "Health: " + health.ToString();
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        if (eventData.pointerDrag != null)
+        {
+            Card card = eventData.pointerDrag.GetComponent<Card>();
+
+            if (card.owner != this)
+            {
+                Debug.Log("Trying to attack other player ");
+                SetHealth(GetHealth() - card.GetAttack());
+            } else {
+                Debug.Log("Tried to drop card on yourself!");
+            }
+        }
     }
 }
