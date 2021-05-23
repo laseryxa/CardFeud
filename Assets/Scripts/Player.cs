@@ -62,7 +62,10 @@ public class Player : MonoBehaviour, IDropHandler
             if (card.owner != this)
             {
                 Debug.Log("Trying to attack other player ");
-                AttackedByCard(card);
+                if (!card.hasStatus(Card.Status.InHand)) 
+                {
+                    AttackedByCard(card);
+                }
             } else {
                 Debug.Log("Tried to drop card on yourself!");
             }

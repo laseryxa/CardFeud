@@ -15,7 +15,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
         Frozen,
         Burning,
         Haste,
-        Taunt
+        Taunt,
+        InHand
     };
     [SerializeField] TextMeshProUGUI Label;
     [SerializeField] TextMeshProUGUI Cost;
@@ -139,10 +140,13 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
         if (card.owner == owner) {
             Debug.Log("Trying to stack own cards, just ignore");
         } else {
-            Debug.Log("Fight!");    
-            SetDefence(GetDefence() - card.GetAttack());
-            card.SetDefence(card.GetDefence() - GetAttack());
-            card.addStatus(Status.Activated);
+            if (!card.hasStatus(Card.Status.InHand)) 
+            {
+                Debug.Log("Fight!");
+                SetDefence(GetDefence() - card.GetAttack());
+                card.SetDefence(card.GetDefence() - GetAttack());
+                card.addStatus(Status.Activated);
+            }
         }
     }
 

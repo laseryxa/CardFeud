@@ -46,6 +46,7 @@ public class Deck : MonoBehaviour
             cardComponent.SetAttack(c.attack);
             cardComponent.SetDefence(c.defence);
             cardComponent.owner = owner;
+            cardComponent.addStatus(Card.Status.InHand);
 
             return card;
         } else {

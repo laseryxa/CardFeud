@@ -13,6 +13,7 @@ public class ActivatedCardsArea : MonoBehaviour, IDropHandler
         cardObject.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
         Card card = cardObject.GetComponent<Card>();
         Debug.Log("Played " + card.GetLabel());
+        card.removeStatus(Card.Status.InHand);
         card.transform.SetParent(this.transform);
         card.DropAccepted();
         Rearrange();
@@ -37,11 +38,12 @@ public class ActivatedCardsArea : MonoBehaviour, IDropHandler
 
             if (CardCanBeDraggedByPlayer(card))
             {
-                if (!CardIsAlreadyInActivatedCardsArea(card)) 
+                if (card.hasStatus(Card.Status.InHand)) 
+                //if (!CardIsAlreadyInActivatedCardsArea(card)) 
                 {
                     Debug.Log("Card cost is " + card.GetCost().ToString() + " and player has " + owningPlayer.GetGold().ToString());
                     if (card.GetCost() <= owningPlayer.GetGold())
-                    {
+                    {                        
                         PlayCard(eventData.pointerDrag);
                     } else {
                         Debug.Log(card.GetLabel() + " is to expensive!");
