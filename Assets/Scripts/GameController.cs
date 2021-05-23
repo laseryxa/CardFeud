@@ -104,22 +104,29 @@ public class GameController : MonoBehaviour
         playerHand.deck = playerDeck;
 
         CreateStartDeck(playerHand.deck);
-        DrawCardsFromDeck(playerHand, cardsAtFirstDraw);
+        DrawCardsFromDeck(playerHand, cardsAtFirstDraw, true);
 
         opponentActivatedCardsArea.owningPlayer = opponent;
         opponentHand.deck = opponentDeck;
         opponentDeck.owner = opponent;
         CreateStartDeck(opponentHand.deck);
-        DrawCardsFromDeck(opponentHand, cardsAtFirstDraw);
+        DrawCardsFromDeck(opponentHand, cardsAtFirstDraw, false);
 
     }
 
-    void DrawCardsFromDeck(HandLayout hand, int count)
+    void DrawCardsFromDeck(HandLayout hand, int count, bool show)
     {
         for (int i = 0; i < count; i++)
         {
             Card currentCard = hand.deck.drawCard();
+            if (show)
+            {
+                currentCard.Show();
+            } else {
+                currentCard.Hide();
+            }
             hand.AddCard(currentCard);
+
         }
     }
 
@@ -132,12 +139,12 @@ public class GameController : MonoBehaviour
             turn += 1;
             currentPlayer = opponent;
             endTurnButton.interactable = false;
-            DrawCardsFromDeck(opponentHand, 1);
+            DrawCardsFromDeck(opponentHand, 1, false);
             opponent.AddGold(turn);
         } else {
             currentPlayer = player;
             endTurnButton.interactable = true;
-            DrawCardsFromDeck(playerHand, 1);
+            DrawCardsFromDeck(playerHand, 1, true);
             player.AddGold(turn);
         }
     }
@@ -164,6 +171,7 @@ public class GameController : MonoBehaviour
             GameObject cardObject = opponentHand.transform.GetChild(mostExpensiveCardIndex).gameObject;
             Card card = cardObject.GetComponent<Card>();
             Debug.Log("Want to play " + card.GetLabel());
+            card.Show();
             opponentActivatedCardsArea.PlayCard(cardObject);
         }
 

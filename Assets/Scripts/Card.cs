@@ -18,11 +18,16 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
         Taunt,
         InHand
     };
-    [SerializeField] TextMeshProUGUI Label;
+    [SerializeField] TextMeshProUGUI Label; 
     [SerializeField] TextMeshProUGUI Cost;
     [SerializeField] TextMeshProUGUI Attack;
     [SerializeField] TextMeshProUGUI Defence;
     [SerializeField] Image sleepingImage;
+    [SerializeField] public Image cardImage;
+    [SerializeField] public Image backsideImage;
+    [SerializeField] public Image costImage;
+    [SerializeField] public Image defenceImage;
+    [SerializeField] public Image attackImage;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private Vector3 startPosition;
@@ -192,6 +197,30 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
         rectTransform.DOComplete();
         Destroy(this.gameObject);
     }
+
+    public void Hide()
+    {
+        backsideImage.enabled = true;
+        cardImage.enabled = false;        
+        costImage.enabled = false;        
+        Cost.enabled = false;
+        Defence.enabled = false;
+        Attack.enabled = false;
+        defenceImage.enabled = false;
+        attackImage.enabled = false;
+    }
+
+    public void Show()
+    {
+        backsideImage.enabled = false;
+        cardImage.enabled = true;
+        costImage.enabled = true;
+        Cost.enabled = true;
+        Defence.enabled = true;
+        Attack.enabled = true;
+        defenceImage.enabled = true;
+        attackImage.enabled = true;
+   }
 
     public void Update()
     {
