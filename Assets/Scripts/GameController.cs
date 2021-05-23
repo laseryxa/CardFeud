@@ -15,6 +15,8 @@ public class Ability
 
 public class GameController : MonoBehaviour
 {
+    private float nextUpdate = 0.0f;
+    private float timer = 0.0f;
     [SerializeField] public Card cardPrefab;
     [SerializeField] public HandLayout handlayoutPrefab;
     [SerializeField] public Deck deckPrefab;
@@ -203,7 +205,7 @@ public class GameController : MonoBehaviour
 
             }
         }
-        
+
         return hasAttackedPlayer;
     }
 
@@ -242,7 +244,8 @@ public class GameController : MonoBehaviour
                     EndTurn();
                 }
             }
-        } 
+        }
+
     }
 
     // Update is called once per frame
@@ -250,7 +253,12 @@ public class GameController : MonoBehaviour
     {
         if (currentPlayer == opponent)
         {
-            UpdateAIPlayer();
+            timer += Time.deltaTime;
+            if (timer > nextUpdate)
+            {
+                UpdateAIPlayer();
+                nextUpdate = timer + 2.0f;
+            }
         }
 
         // Check if any player is dead, if so, return to main menu for now.
