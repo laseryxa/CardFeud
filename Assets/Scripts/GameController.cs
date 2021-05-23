@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class Ability
 {
@@ -160,14 +162,98 @@ public class GameController : MonoBehaviour
         return mostExpensiveCardCost >= 0;
     }
 
+    bool TryAttackPlayerCards()
+    {
+        bool hasAttackedCard = false;
+        if (playerActivatedCardsArea.transform.childCount > 0)
+        {
+            for (int i = 0; i < opponentActivatedCardsArea.transform.childCount; i++)
+            {
+                GameObject cardObject = opponentActivatedCardsArea.transform.GetChild(i).gameObject;
+                Card card = cardObject.GetComponent<Card>();
+                if (!card.hasStatus(Card.Status.Activated) && !card.hasStatus(Card.Status.Sleeping))
+                {
+                    GameObject playerCardObject = playerActivatedCardsArea.transform.GetChild(0).gameObject;
+                    Card playerCard = playerCardObject.GetComponent<Card>();
+                    hasAttackedCard = true;
+                    Debug.Log("Attacking " + playerCard.GetLabel() + " with " + card.GetLabel());
+                    card.AttackCard(playerCard);
+                }
+            }
+        }
+
+        return hasAttackedCard;
+    }
+
+    bool TryAttackPlayer()
+    {
+        bool hasAttackedPlayer = false;
+        if (playerActivatedCardsArea.transform.childCount == 0)
+        {
+            for (int i = 0; i < opponentActivatedCardsArea.transform.childCount; i++)
+            {
+                GameObject cardObject = opponentActivatedCardsArea.transform.GetChild(i).gameObject;
+                Card card = cardObject.GetComponent<Card>();
+                if (!card.hasStatus(Card.Status.Activated) && !card.hasStatus(Card.Status.Sleeping))
+                {
+                    hasAttackedPlayer = true;
+                    Debug.Log("Attacking player with " + card.GetLabel());
+                    player.AttackedByCard(card);
+                }
+
+            }
+        }
+        
+        return hasAttackedPlayer;
+    }
+
+    void LoadMainMenu()
+    {
+        DOTween.KillAll(true);            
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    // Check if anyone has won
+    void CheckVictory()
+    {
+        if (player.GetHealth() <= 0)
+        {
+            LoadMainMenu();
+        }
+
+        if (opponent.GetHealth() <= 0)
+        {
+            LoadMainMenu();
+        }
+    }
+
+    void UpdateAIPlayer()
+    {
+        // First try playing all cards, most expensive first, until we don't have enough gold.
+        if (!TryPlayMostExpensiveCard())
+        {
+            // Then try to attack other players cards until all cards have attacked, or there 
+            // are no more cards to attack.
+            if (!TryAttackPlayerCards())
+            {
+                // Then try to attack the other player
+                if (!TryAttackPlayer())
+                {
+                    EndTurn();
+                }
+            }
+        } 
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (currentPlayer == opponent)
         {
-            if (!TryPlayMostExpensiveCard())
-            {
-            } 
+            UpdateAIPlayer();
         }
+
+        // Check if any player is dead, if so, return to main menu for now.
+        CheckVictory();
     }
 }

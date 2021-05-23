@@ -126,6 +126,13 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
         rectTransform.anchoredPosition += eventData.delta;
     }
 
+    public void AttackCard(Card cardToAttack)
+    {
+        this.SetDefence(GetDefence() - cardToAttack.GetAttack());
+        cardToAttack.SetDefence(cardToAttack.GetDefence() - GetAttack());
+        this.addStatus(Status.Activated);
+    }
+
     public void OnDrop(PointerEventData eventData)
     {
         Card card = eventData.pointerDrag.GetComponent<Card>();

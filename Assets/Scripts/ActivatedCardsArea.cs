@@ -19,26 +19,30 @@ public class ActivatedCardsArea : MonoBehaviour, IDropHandler
         owningPlayer.AddGold(-card.GetCost());
     }
 
+    private bool CardCanBeDraggedByPlayer(Card card)
+    {
+        return card.owner == owningPlayer;
+    }
+
+    private bool CardIsAlreadyInActivatedCardsArea(Card card)
+    {
+        return card.transform.parent == this.transform;
+    }
+    
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.pointerDrag != null)
         {
             Card card = eventData.pointerDrag.GetComponent<Card>();
 
-            if (card.owner == owningPlayer)
+            if (CardCanBeDraggedByPlayer(card))
             {
-                if (card.transform.parent != this.transform) 
+                if (!CardIsAlreadyInActivatedCardsArea(card)) 
                 {
                     Debug.Log("Card cost is " + card.GetCost().ToString() + " and player has " + owningPlayer.GetGold().ToString());
                     if (card.GetCost() <= owningPlayer.GetGold())
                     {
                         PlayCard(eventData.pointerDrag);
-                        //Debug.Log("Dropped " + card.GetLabel());
-                        //eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
-                        //card.transform.SetParent(this.transform);
-                        //card.DropAccepted();
-                        //Rearrange();
-                        //owningPlayer.AddGold(-card.GetCost());
                     } else {
                         Debug.Log(card.GetLabel() + " is to expensive!");
                     }

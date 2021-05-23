@@ -911,6 +911,7 @@ MonoBehaviour:
   opponentActivatedCardsArea: {fileID: 72514215}
   opponent: {fileID: 1339985332}
   turn: 0
+  currentPlayer: {fileID: 0}
 --- !u!1001 &1231294685
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -918,6 +919,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1002328411}
     m_Modifications:
+    - target: {fileID: 118590018202837150, guid: 3bdb181ec5dda287480953d1baa9d620, type: 3}
+      propertyPath: gold
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3048458659528116595, guid: 3bdb181ec5dda287480953d1baa9d620, type: 3}
       propertyPath: m_Name
       value: Opponent

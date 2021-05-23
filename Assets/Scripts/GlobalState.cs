@@ -9,6 +9,13 @@ public class GlobalState : MonoBehaviour
     
     void Awake()
     {
+        GameObject[] objs = GameObject.FindGameObjectsWithTag("GlobalState");
+
+        if (objs.Length > 1)
+        {
+            Destroy(this.gameObject);
+        }
+
         root = new GameObject();
         
         //Let the gameobject persist over the scenes

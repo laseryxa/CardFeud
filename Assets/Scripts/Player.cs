@@ -47,6 +47,12 @@ public class Player : MonoBehaviour, IDropHandler
         healthText.text = "Health: " + health.ToString();
     }
 
+    public void AttackedByCard(Card card)
+    {
+        SetHealth(GetHealth() - card.GetAttack());
+        card.addStatus(Card.Status.Activated);
+    }
+
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.pointerDrag != null)
@@ -56,7 +62,7 @@ public class Player : MonoBehaviour, IDropHandler
             if (card.owner != this)
             {
                 Debug.Log("Trying to attack other player ");
-                SetHealth(GetHealth() - card.GetAttack());
+                AttackedByCard(card);
             } else {
                 Debug.Log("Tried to drop card on yourself!");
             }
