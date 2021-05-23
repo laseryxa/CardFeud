@@ -206,6 +206,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
         Cost.enabled = false;
         Defence.enabled = false;
         Attack.enabled = false;
+        Label.enabled = false;
         defenceImage.enabled = false;
         attackImage.enabled = false;
     }
@@ -218,6 +219,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
         Cost.enabled = true;
         Defence.enabled = true;
         Attack.enabled = true;
+        Label.enabled = true;
         defenceImage.enabled = true;
         attackImage.enabled = true;
    }
