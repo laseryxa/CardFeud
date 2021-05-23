@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 
@@ -39,6 +40,8 @@ public class GameController : MonoBehaviour
     public List<Ability> abilities;
 
     public Player currentPlayer;
+
+    public Button endTurnButton;
 
     public void AddAbility(string name) {
         abilities.Add(new Ability(name));
@@ -128,10 +131,12 @@ public class GameController : MonoBehaviour
         if (currentPlayer == player) {
             turn += 1;
             currentPlayer = opponent;
+            endTurnButton.interactable = false;
             DrawCardsFromDeck(opponentHand, 1);
             opponent.AddGold(turn);
         } else {
             currentPlayer = player;
+            endTurnButton.interactable = true;
             DrawCardsFromDeck(playerHand, 1);
             player.AddGold(turn);
         }
@@ -251,7 +256,7 @@ public class GameController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+        {
         if (currentPlayer == opponent)
         {
             timer += Time.deltaTime;
