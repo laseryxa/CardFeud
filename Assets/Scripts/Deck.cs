@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
+    [System.Serializable]
     public class CardData
     {
         public string name;
@@ -21,9 +22,9 @@ public class Deck : MonoBehaviour
     
     [SerializeField]
     public Card CardPrefab;
-    List<CardData> cards;
+    public List<CardData> cards; 
     public Player owner;
-
+    
     void Awake()
     {
         cards = new List<CardData>();
@@ -39,6 +40,7 @@ public class Deck : MonoBehaviour
         if (cards.Count > 0) {
             CardData c = cards[0];
             cards.RemoveAt(0);
+            Debug.Log("Card drawn was " + c.name);
             Card card = Instantiate(CardPrefab, transform);
             var cardComponent = card.GetComponent<Card>();
             cardComponent.SetLabel("<color=#005500>" + c.name);
@@ -50,6 +52,7 @@ public class Deck : MonoBehaviour
 
             return card;
         } else {
+            Debug.Log("Out of cards in deck!");
             return null;
         }
     }

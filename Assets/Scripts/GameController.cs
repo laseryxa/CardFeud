@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -64,7 +65,7 @@ public class GameController : MonoBehaviour
         deck.AddCard("Silly card", 3, 0, 3);
         deck.AddCard("Not so good card", 7, 1, 1);
         for (int i = 0; i < 100; i++) {
-            deck.AddCard("Card " + i.ToString(), i % 10, i % 5 + 1, i % 7);
+            deck.AddCard("Card " + i.ToString(), i % 10, i % 5 + 1, Math.Max(1, i % 7));
         }
     }
 
